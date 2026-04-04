@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Manipulation de Classe avec classList</title>
+   <style>
+       .highlight { color: red; font-weight: bold; }
+       .hidden { display: none; }
+       .bordered { border: 2px solid blue; padding: 5px; }
+   </style>
+</head>
+<body>
+   <p id="paragraph">Observez comment je change de style!</p>
+        <button id="toggleHighlight" onclick="ajoutSuppClasse('p')">Ajouter/Supprimer Highlight</button>
+   
+        <button id="hide" onclick="cacherClasse('p')">Cacher/Montrer</button>
+   
+        <button id="addBorder" onclick="ajoutSuppBordure('p')">Ajouter une Bordure</button>
+   
+
+   </button>
+   <script src="script.js"></script>
+</body>
+</html>
