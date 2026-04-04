@@ -1,0 +1,6 @@
+div[data-available="true"] {
+ background-color: hsl(125, 69%, 38%);
+}
+div[data-available="false"] {
+ background-color: hsl(0, 90%, 41%);
+}
