@@ -1,25 +1,39 @@
 const mario=document.querySelector('#player');
+const parent = mario.parentElement;
 let x=0, y=0;
+
 document.addEventListener('keydown', (e) =>  {
-   switch (e.code) {
+    let top = mario.offsetTop;
+    let left = mario.offsetLeft;
+    
+    switch (e.key) {
     case "ArrowUp":
-        y-=10;
-        mario.src='https://static.lacapsule.academy/practice/mario/mario-front-1.png'
+        if (top > 0) {    
+            mario.style.top = (top - 10)+"px";
+            mario.src='https://static.lacapsule.academy/practice/mario/mario-back-1.png';
+        }
         break;
+        
     case "ArrowDown":
-        y+=10;
-        mario.src='https://static.lacapsule.academy/practice/mario/mario-back-1.png'
+        if (top < parent.offsetHeight - mario.offsetHeight) {
+            mario.style.top = (top + 10)+"px";
+            mario.src='https://static.lacapsule.academy/practice/mario/mario-front-1.png';
+        } 
         break;    
+            
     case "ArrowLeft":
-        x-=10;
-        mario.src='https://static.lacapsule.academy/practice/mario/mario-left-1.png'
+        if (left > 0) {
+            mario.style.left = (left - 10)+"px"; 
+            mario.src='https://static.lacapsule.academy/practice/mario/mario-left-1.png';
+        }
         break;
+        
     case "ArrowRight":
-        x+=10;
-        mario.src='https://static.lacapsule.academy/practice/mario/mario-right-1.png'
-        break;    
+        if (left < parent.offsetWidth - mario.offsetWidth) {
+            mario.style.left = (left + 10) + "px";
+            mario.src='https://static.lacapsule.academy/practice/mario/mario-right-1.png';
+        } 
+        break;  
    }
-   mario.style.transform = `translate(${x}px, ${y}px)`;
-   console.log(mario.offsetTop);
  });
  
