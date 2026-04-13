@@ -1,4 +1,56 @@
 #!/usr/bin/env node 
+const produits = [
+  { id: 1, nom: "Stylo", prix: 1.20, categorie: "bureau" },
+  { id: 2, nom: "Cahier", prix: 2.50, categorie: "bureau" },
+  { id: 3, nom: "Sac", prix: 22.30, categorie: "voyage" }
+];
+//const keys = Object.keys(produits[0]);
+//const Values = Object.values(produits[0]);
+//const entries = Object.entries(produits[0]);
+//console.log(keys);
+//console.log(Values);
+//console.log(entries);
+function AssignProp(tabObj, textPrpo, valeurDef) {
+    
+    for (let i=0; i<tabObj.length; i++) {
+        tabObj[i]=Object.assign({},tabObj[i],{[textPrpo]: valeurDef})
+    }
+    return tabObj
+}
+
+
+//AssignProp(produits,"stock", 10);
+function Obj_Tab(tabObj) {
+    const result = {};
+
+    const keys = Object.keys(tabObj);     // ['0', '1', '2']
+    const values = Object.values(tabObj); // tableau des objets
+
+    for (let i = 0; i < keys.length; i++) {
+        const produit = values[i];
+        result[produit.id] = produit;
+    }
+
+    return result;
+}
+
+//console.log(Obj_Tab(produits));
+
+function Obj_Text(tabObj) {
+    let result="";
+    for (let i = 0; i < tabObj.length; i++) {
+        const produit = Object.entries(tabObj[i]);
+        let keysValue="";
+        for (let j = 0; j < produit.length; j++) {
+            keysValue += produit[j][0] +": "+ produit[j][1]+", ";
+        }
+        keysValue=keysValue.slice(0,-2);
+        result+=keysValue+'\n';
+    }
+    return result
+}
+console.log(Obj_Text(produits));
+
 const tabUser = ["a1",null,"a2",null,"a3"];
 
 let userInfo = {
@@ -183,7 +235,7 @@ function tabTestMail(tab){
     return Objet.values(tabgroup).every(group=> group.some(user => user.email.includes("example")));
 }
 
-console.log(tabTestMail(users));
+//console.log(tabTestMail(users));
 
 //niveauExterieur();
 //let test=undefined;
@@ -193,3 +245,4 @@ console.log(tabTestMail(users));
 //console.log(calculAire("200px","100px"));
 
 //compteur(50);
+
