@@ -22,3 +22,18 @@ body {
     display: none;
   }
 }
+@media (min-width: 1025px) {
+  img {
+    width: 100%;
+  }
+}
+@media (min-width: 600px) and (max-width: 1200px) and (prefers-color-scheme: light) {
+  header {
+    background-color: violet;
+  }
+}
+@media (orientation: portrait) and (min-height:700px) {
+  p {
+    margin-bottom: 20px;
+  }
+}
