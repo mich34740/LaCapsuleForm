@@ -43,21 +43,37 @@ db.find()
             .select('name email lastActive')
             .then(users => console.log(users));
 }
-findOldActiveUsers()
+//findOldActiveUsers()
 
 
 //Complétez la fonction findOldInactiveUsers pour qu'elle affiche (dans un console.log) les utilisateurs inactifs (isActive: false) dont la dernière activité remonte à plus d'un an, à l'exception des utilisateurs de moins de 18 ans et de plus de 65 ans.
 
 function findOldInactiveUsers() {
+const oldDate = new Date();
+oldDate.setMonth(oldDate.getMonth()-12);
+const moisUnAn = oldDate.getFullYear() +'-'+ String(oldDate.getMonth() + 1).padStart(2, '0') +'-'+ String(oldDate.getDate()).padStart(2, '0');
+console.log(moisUnAn);
 
+db.find()
+    .where('isActive').eq(false)             
+    .where('lastActive').lt(moisUnAn)
+    .where('age').gte(18) 
+    .where('age').lt(65)
+    .select('name email lastActive')
+    .then(users => console.log(users));
 }
+
 //findOldInactiveUsers()
 
 
 //Complétez la fonction findTravelAndMusicUsers pour qu'elle affiche (dans un console.log) les utilisateurs qui ont à la fois "musique" et "voyage" dans leurs interestTags, indiquant un intérêt croisé spécifique. Sélectionnez leurs noms et adresses e-mail, et triez les utilisateurs par âge en ordre croissant.
 
 function findTravelAndMusicUsers() {
-
+db.find()
+    .where('interestTags').all(["musique", "voyage"])             
+    .sort({age: 1}) 
+    .select('name email')
+    .then(users => console.log(users));
 }
 //findTravelAndMusicUsers()
 
@@ -65,15 +81,27 @@ function findTravelAndMusicUsers() {
 //Complétez la fonction findTechAndHealthNonSeniorUserspour qu'elle affiche (dans un console.log) les utilisateurs inactifs ayant "technologie" ou "santé" dans leurs interestTags et âgés de moins de 50 ans. Sélectionnez les noms et adresses e-mail, et triez les résultats par lastActive de manière décroissante pour cibler les utilisateurs récemment inactifs en priorité.
 
 function findTechAndHealthNonSeniorUsers() {
-
+db.find()
+    .where('isActive').eq(false)      
+    .where('interestTags').in(["technologie", "santé"])     
+    .where('age').lt(50)         
+    .sort({lastActive: -1}) 
+    .select('name email')
+    .then(users => console.log(users));
 }
+
 //findTechAndHealthNonSeniorUsers()
 
 
 //Complétez la fonction findNonFinanceUserspour qu'elle affiche (dans un console.log) les utilisateurs actifs qui ne montrent aucun intérêt pour "la finance" et "l'investissement" dans leurs interestTags. Sélectionnez les noms et adresses e-mail de ces utilisateurs et triez les résultats par age en ordre décroissant.
 
 function findNonFinanceUsers() {
-
+db.find()
+    .where('isActive').eq(true)    
+    .where('interestTags').nin(["la finance", "l'investissement"])     
+    .sort({age: -1}) 
+    .select('name email')
+    .then(users => console.log(users));
 }
 //findNonFinanceUsers()
 
@@ -85,10 +113,21 @@ function findNonFinanceUsers() {
  Vous devrez utiliser l'opérateur $or*/
 
  function findSelectedUsers() {
+    const oldDate = new Date();
+    oldDate.setMonth(oldDate.getMonth()-6);
+    const mois6mois = oldDate.getFullYear() +'-'+ String(oldDate.getMonth() + 1).padStart(2, '0') +'-'+ String(oldDate.getDate()).padStart(2, '0');
+    console.log(mois6mois);
 
- }
+db.find()
+    .or([{interestTags: { $size: 0}, dailyActivityLogs: { $gt: 5}},    
+         {interestTags: { $in: ["la photographie"]}, lastActive: { $lt: mois6mois}}     
+        ])
+    .sort({lastActive: 1}) 
+    .select('name email lastActive')
+    .then(users => console.log(users));
+}
 
- //findSelectedUsers()
+findSelectedUsers()
   
 
 module.exports = { findLastActiveUsers, findInactiveYoungUsers, findOldActiveUsers, findOldInactiveUsers,  findTravelAndMusicUsers, findTechAndHealthNonSeniorUsers, findNonFinanceUsers, findSelectedUsers}; // On ne touche pas à cette ligne 😉
