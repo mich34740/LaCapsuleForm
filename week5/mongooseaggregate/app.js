@@ -62,7 +62,8 @@ function countActiveUsers() {
 //Complétez la fonction activeAverageAge pour qu'elle affiche (dans un console.log) l'âge moyen des utilisateurs actifs dans votre application. Cette requête vous introduit à l'agrégat $avg, une opération pratique pour obtenir des statistiques descriptives.
 
 function activeAverageAge() {
- db.aggregate([
+    const moisDernier = new Date(new Date().getFullYear(), new Date().getMonth-1, 1);
+    db.aggregate([
         {$match: {isActive: {$eq: true}}},
         {$group: {_id: "$isActiveAgeMoy", AgeMoyen: {$avg: "$age"}
         }}
@@ -86,30 +87,61 @@ db.aggregate([
                     })
     .catch(err => console.error(err));
 }
-uniqueInterestTags()
+//uniqueInterestTags()
 
 
 //Complétez la fonction averageActivityLogs pour qu'elle affiche (dans un console.log) la moyenne de dailyActivityLogs pour tous les utilisateurs actifs au cours du dernier mois. Utilisez une requête d'agrégation pour grouper les utilisateurs actifs et calculer cette moyenne.
 
 function averageActivityLogs() {
-
+db.aggregate([
+        {$match: {isActive: true, 
+                  lastActiveDate: {
+                    $gte: {$dateSubtract: {startDate: {$dateTrunc: {date: "$$NOW",unit: "month"}},
+                                                        unit: "month", amount: 1}},
+                    $lt: {$dateTrunc: {date: "$$NOW", unit: "month"}}}
+                }},
+        {$group: {_id: null, dailyActivityLogsmoy: {$avg: "$dailyActivityLogs"}}}
+        
+            ])
+            .then(result => {console.log(result);})
+            .catch(err => console.error(err));
 }
+
+
 //averageActivityLogs()
 
 //Complétez la fonction groupByAgeRange pour qu'elle affiche (dans un console.log) les utilisateurs actifs groupés par tranche d'âge (par exemple, moins de 20 ans, 20-40 ans, et plus de 40 ans) ainsi que le nombre d'utilisateurs dans chaque groupe.
 
 function groupByAgeRange() {
-
+    db.aggregate([
+        {$match: {isActive: true}},
+        {$group: {_id: null, countm20: {$sum: {$cond: [ {$lt: ["$age", 20]},1,0]}},
+                             count2040: {$sum: {$cond: [ { $and: [ {$gte: ["$age", 20]},{$lte: ["$age", 40]}]},1,0]}},                 
+                             counts40: {$sum: {$cond: [ {$gt: ["$age", 40]},1,0]}}
+        }}
+    ])
+    .then(result => {console.log(result);})
+    .catch(err => console.error(err));
 }
+
 //groupByAgeRange()
 
 
 //Complétez la fonction countActiveUsersPerInterest pour qu'elle affiche (dans un console.log) le nombre d'utilisateurs actifs intéressés par chaque tag dans interestTags. Elle devra triez les résultats pour montrer les tags les plus populaires en premier.
 
 function countActiveUsersPerInterest() {
-
+db.aggregate([
+        {$match: {isActive: {$eq: true}}},
+        {$unwind: "$interestTags"},
+        {$group: {_id: "$interestTags", count: {$sum: 1}}},
+        {$sort: {count: -1}}
+    ])
+    .then(result => {console.log(result); 
+                    })
+    .catch(err => console.error(err));
 }
-//countActiveUsersPerInterest()
+
+countActiveUsersPerInterest()
 
 
 module.exports = { countActiveAndInactive, findRecentDate, countUninterested, countActiveUsers, activeAverageAge, uniqueInterestTags, averageActivityLogs, groupByAgeRange, countActiveUsersPerInterest }; // On ne touche pas à cette ligne 😉
