@@ -12,7 +12,7 @@ function findLastActiveUsers() {
             .select('name email age')
             .then(users => console.log(users));
 }
-//findLastActiveUsers()
+findLastActiveUsers()
 
 
 // Complétez la fonction findInactiveYoungUsers pour qu'elle affiche (dans un console.log) les noms et les adresses e-mail des 5 utilisateurs non actifs de moins de 18 ans triés par âge décroissant
@@ -127,7 +127,7 @@ db.find()
     .then(users => console.log(users));
 }
 
-findSelectedUsers()
+//findSelectedUsers()
   
 
 module.exports = { findLastActiveUsers, findInactiveYoungUsers, findOldActiveUsers, findOldInactiveUsers,  findTravelAndMusicUsers, findTechAndHealthNonSeniorUsers, findNonFinanceUsers, findSelectedUsers}; // On ne touche pas à cette ligne 😉

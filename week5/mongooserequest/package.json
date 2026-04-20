@@ -9,6 +9,7 @@
     "jest": "^27.5.1"
   },
   "dependencies": {
+    "dotenv": "^17.4.2",
     "mongoose": "^9.4.1"
   }
 }
