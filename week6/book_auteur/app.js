@@ -46,6 +46,27 @@ function createBook(bookTitle, isbnId, authorId,genresBook,reviewBook) {
 // createBook('ça', 231321231321321231,'69e88aa3af47565ccdb5ad5b',['69e88aa3af47565ccdb5ad5a','69e88aa3af47565ccdb5ad58']); 
 // createBook('Le visiteur', 2312313321321231,'69e88aa3af47565ccdb5ad5d',['69e88aa3af47565ccdb5ad59']); 
 // createBook("J'accuse", 231231332565651321231,'69e88aa3af47565ccdb5ad5c', ['69e88aa3af47565ccdb5ad59']); 
+function updateBook(title, genresBook, reviewBook) {
+    const updateFields = {};
+    
+    if (genresBook !== undefined && genresBook !== "") {
+         updateFields.$addToSet = {genres:  genresBook};
+    };
+    if (reviewBook && Object.keys(reviewBook).length > 0)  {
+        updateFields.$push = {reviews: reviewBook};
+    };
+    
+    if (Object.keys(updateFields).length === 0) {
+      console.log("Aucune donnée à mettre à jour");
+      return;
+    };
+    book.updateOne({title: title}, updateFields).then(() => {console.log(`Book updated for ${title}`)})
+};
+
+//updateBook("J'accuse", '69e88aa3af47565ccdb5ad59', {reviewer: 'Hater1', text: 'fk  fgl fl dfmlhldmf hdjhjkfdsdfsdkjhsd kdklghsghfxcgdfhghqd', rating: 4});
+//updateBook("J'accuse", '', {reviewer: 'Hater2', text: 'fk  fgl fl dfmlhldmf hdjhjkfdsdfsdkjhsd kdklghsghfxcgdfhghqd', rating: 3});
+//updateBook('ça', '69e88aa3af47565ccdb5ad59');
+
 
 //! Display all Books from database
 function displayBooksAuthor() {
@@ -57,12 +78,70 @@ function displayBooksAuthor() {
 //displayBooksAuthor();
 
 //! Display all Books from database
-function displayBooksGenre() {
-	book.find()
+function displayBooksGenre(isbnId) {
+	book.findOne({isbn: isbnId})
     .populate('genres','name')
-    .then(data => {console.log("ALL BookS =>", JSON.stringify(data, null, 2))});
+    .then(data => {console.log("BookS ISBN =>", JSON.stringify(data, null, 2))});
 };
-displayBooksGenre();
+//displayBooksGenre(231321231321321200);
+
+function displayBooksReview(rating) {
+	book.find({"reviews.rating": rating})
+  .populate('genres')  
+  .populate('author')
+    .then(data => {console.log("BookS rating =>", JSON.stringify(data, null, 2))});
+};
+//displayBooksReview(5);
+
+function displayBooksReviewAuthor(authorId, ratingMoy) {
+  const mongoose = require("mongoose");
+  book.aggregate([
+          {$match: {author: new mongoose.Types.ObjectId(authorId)}},
+          {$addFields: {avgRating: {$avg: "$reviews.rating"}}},
+          {$match: {avgRating: {$gt: ratingMoy}}}
+        ])
+    .then(data => {console.log("BookS rating author=>", JSON.stringify(data, null, 2))});  
+};
+
+
+//displayBooksReviewAuthor('69e88aa3af47565ccdb5ad5b',4);
+
+function displayAuthorGenre(genreId) {
+  const mongoose = require("mongoose");
+  book.aggregate([
+          {$match: {genres: new mongoose.Types.ObjectId(genreId)}},
+          {$lookup: {
+              from: "authors",
+              localField: "author",
+              foreignField: "_id",
+              as: "author"
+          }},
+          {$unwind: "$author"}
+        ])
+    .then(data => {console.log("Authors genre=>", JSON.stringify(data, null, 2))});  
+};
+//displayAuthorGenre("69e88aa3af47565ccdb5ad59");
+function displayBooksReviewAGG(rating) {
+	book.aggregate([
+    {$match: {"reviews.rating": {$eq: rating}}},
+    {$lookup: {
+              from: "authors",
+              localField: "author",
+              foreignField: "_id",
+              as: "author"
+          }},
+          {$unwind: "$author"},
+          {$lookup: {
+              from: "genres",
+              localField: "genres",
+              foreignField: "_id",
+              as: "genres"
+          }},
+          
+          {$unwind: "$genres"}])    
+    .then(data => {console.log("BookS rating =>", JSON.stringify(data, null, 2))});
+};
+displayBooksReviewAGG(5);
 
 //! Update a type document/object in 'types' collection
 function updateAuthor(name, textBio, website) {
@@ -73,12 +152,14 @@ function updateAuthor(name, textBio, website) {
     if (website !== undefined && website !== "") {
         updateFields.website = website;
     };
-     if (Object.keys(updateFields).length === 0) {
+    
+    if (Object.keys(updateFields).length === 0) {
       console.log("Aucune donnée à mettre à jour");
       return;
     };
     author.updateOne({name: name},{$set: updateFields}).then(() => {console.log(`Author updated for ${name}`)})
 };
+
 const textBio=`Éric-Emmanuel Schmitt enseigne un an au lycée militaire de Saint-Cyr pendant son service militaire[4], puis deux ans à l’université de Besançon en tant qu’assistant-normalien, puis un an dans un lycée de Cherbourg. Il est ensuite élu maître de conférences à l'université de Chambéry, où il enseigne durant quatre ans[réf. nécessaire].
 
 Le succès français puis international de sa pièce Le Visiteur en 1994 lui fait quitter l’université pour se consacrer entièrement à l’écriture[5].
