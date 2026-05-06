@@ -9,3 +9,4 @@ const authorSchema = mongoose.Schema({
 const Author = mongoose.model('authors', authorSchema);
 
 module.exports = Author;
+
