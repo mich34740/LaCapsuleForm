@@ -10,6 +10,11 @@ const envFile =
     : '.env';
 dotenv.config({ path: envFile });
 
+require('dotenv-safe').config({
+ allowEmptyValues: false, // ou true, selon votre cas
+ example: '.env.example'
+});
+
 var express = require('express');
 var app = express();
 var indexRouter = require('./routes/index');
