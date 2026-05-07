@@ -58,6 +58,7 @@ typings/
 .env
 .env.production
 .env.example
+config/env.js
 
 # next.js build output
 .next
