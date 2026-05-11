@@ -63,3 +63,4 @@ config/env.js
 # next.js build output
 .next
 week8/WeatherApp/.env.production
+.env.production
