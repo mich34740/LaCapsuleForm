@@ -12,8 +12,8 @@
     "testMatch": [
       "**/__tests__/**/*.test.js",
       "**/?(*.)+(spec|test).js"
-    ],
-  }
+    ]
+  },
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
