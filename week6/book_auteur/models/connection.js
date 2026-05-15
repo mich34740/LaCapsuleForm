@@ -1,7 +1,7 @@
 #!/usr/bin/env node 
 const mongoose = require('mongoose');
 require("dotenv").config();
-const connectionString = process.env.connectionString;
+const connectionString = process.env.connectionString+"/book_auteur";
 
 
 mongoose.connect(connectionString, { connectTimeoutMS: 2000 })
