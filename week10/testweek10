@@ -1,0 +1,22 @@
+#!/usr/bin/env node 
+function joinObjects(obj1, obj2) {
+    let newObj = {};
+    obj2.city=obj2.country;
+    delete obj2.country;
+    newObj = Object.assign(obj1, obj2);
+    
+    return newObj;
+}
+
+
+const object1 = { continent: 'Europe', country: 'France' }
+const object2 = { planet: 'Earth', country: 'Paris', state: 'IDF' }
+console.log(joinObjects(object1, object2));
+// Expected result :
+// {
+//     "continent": "Europe",
+//     "country": "France",
+//     "planet": "Earth",
+//     "state": "IDF",
+//     "city": "Paris"
+// }
