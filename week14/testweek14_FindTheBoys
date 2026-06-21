@@ -1,0 +1,25 @@
+#!/usr/bin/env node 
+function findAWord(data) {
+    const regex = /boys/i;
+
+    let results = [];
+    
+    results=data.filter(sing => {
+        return regex.test(sing.artist) ||regex.test(sing.song);
+    }) 
+    
+    
+    return results;
+}
+
+
+const playlist = [
+   { artist: "The Cure", song: "Boys Don't Cry" },
+   { artist: "The Beatles", song: "Penny Lane" },
+   { artist: "Oasis", song: "Wonderwall" },
+   { artist: "Depeche Mode", song: "Enjoy the silence" },
+   { artist: "The Beach Boys", song: "Surfin' USA" },
+]
+console.log(findAWord(playlist));
+// Expected result:
+// [{"artist":"The Cure","song":"Boys Don't Cry"},{"artist":"The Beach Boys","song":"Surfin' USA"}]
