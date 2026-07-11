@@ -1,0 +1,51 @@
+#!/usr/bin/env node 
+function stringRevert(str) {
+    let newWord = '';
+    
+    for (let i = str.length - 1; i >= 0; i--) 
+    { newWord = newWord + str[i];}
+    
+    return newWord;
+}
+
+const word = "tpircSavaJ";
+//console.log(stringRevert(word));
+// Expected result: JavaScript
+
+
+function stringManipulation(str1, str2) {
+    let finalWord = '';
+    
+    const cleanWord2 = str2.replace('%', '');
+    const reversedWord2 = cleanWord2.split('').reverse().join('');
+
+    finalWord = str1.charAt(0).toUpperCase() + str1.slice(1) +
+    reversedWord2.charAt(0).toUpperCase() + reversedWord2.slice(1);
+    
+    return finalWord;
+}
+
+
+const word1 = 'java';
+const word2= 'tpi%rcs';
+//console.log(stringManipulation(word1, word2));
+// Expected result: JavaScript
+
+function decode(str) {
+    let correctWord = '';
+    for (let i = 0 ; i <str.length; i++) {
+        correctWord=correctWord + String.fromCharCode(str.charCodeAt(i) + 1) 
+    }
+
+    // Insert your code here
+    
+    return correctWord;
+}
+
+
+const word4 = 'bnchmf';
+console.log(decode(word4));
+// Expected result: coding
+
+
+
